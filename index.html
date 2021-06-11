@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final</title>
+    <style media="screen">
+    body{
+      background-color: #aaa;
+    }
+    .aa {
+      font-size: 30px;
+      color: white;
+      background-color: #333;
+      padding: 300px;
+     }
+      .BT{
+        width: 180px;
+        color: white;
+        background-color: #444;
+
+      }
+    </style>
+</head>
+<body>
+<div class="aa">
+
+<fieldset style="border: 3px black solid">
+    <legend>Euro Currency Converter</legend>
+	<center>
+    <form>
+        <table>
+            <tr>
+                <th style="float:left">Convert</th>
+            </tr>
+            <tr>
+                <td><input type="number" class="form-input" id="number" onchange="inputAmount()"> Euro</td><br></tr>
+             <tr>   <td>To <select name="select" id="select">
+
+            <option value="curr">Select Currency</option>
+            <option value="MYR">Malaysian Ringgit(MYR)</option>
+						<option value="IDR">Indonesian Rupiah(IDR)</option>
+						<option value="SGD">Singaporean Dollar(SGD)</option>
+            <option value="THB">Thia Bhat(THB)</option>
+                    </select></td>
+            </tr>
+        </table>
+    </form>
+	<button class="BT" type="submit" onclick="Convert()" >Convert</button><br><br>
+    <div id="output">Please choose a Currency</div>
+  </div>
+</fieldset>
+    <script>
+        function Convert() {
+            let curr = document.querySelector("#number");
+			console.log(curr);
+            var client = new XMLHttpRequest();
+			client.onreadystatechange = function () {
+                if (client.readyState == 4) {
+                    var response = JSON.parse(client.responseText);
+					console.log(response);
+                    var calc = 0.0;
+                    switch (select.value) {
+                        case "MYR":
+                            calc = Number(curr.value) * Number(response['rates']['MYR']);
+                            document.getElementById('output').textContent = calc.toFixed(2) + "MYR"; break;
+                        case "IDR":
+                            calc = Number(curr.value) * Number(response['rates']['IDR']);
+                            document.getElementById('output').textContent = calc.toFixed(2) + "IDR"; break;
+					           	case "SGD":
+                            calc = Number(curr.value) * Number(response['rates']['SGD']);
+                            document.getElementById('output').textContent = calc.toFixed(2) + "SGD"; break;
+					         	case "THB":
+                            calc = Number(curr.value) * Number(response['rates']['THB']);
+                            document.getElementById('output').textContent = calc.toFixed(2) + "THB"; break;
+                    }
+                }
+            }
+            client.open("GET", "https://api.frankfurter.app/latest", true);
+            client.send();
+        }
+
+    </script>
+</body>
+
+</html>
